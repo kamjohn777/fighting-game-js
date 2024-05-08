@@ -10,7 +10,7 @@ $(document).ready(function () {
 
   c.fillRect(0, 0, canvas[0].width, canvas[0].height);
 
-  const gravity = 0.2;
+  const gravity = 0.7;
 
   class Sprite {
     constructor({ position, velocity }) {
@@ -120,7 +120,7 @@ $(document).ready(function () {
         player.lastKey = "a";
         break;
       case "w":
-        player.velocity.y = -10;
+        player.velocity.y = -20;
         break;
 
       // Enemy Keys
@@ -133,7 +133,7 @@ $(document).ready(function () {
         enemy.lastKey = "ArrowLeft";
         break;
       case "ArrowUp":
-        enemy.velocity.y = -10;
+        enemy.velocity.y = -20;
         break;
     }
     console.log(e.key);
