@@ -4,8 +4,8 @@ $(document).ready(function () {
   const canvas = $("canvas");
   const c = canvas[0].getContext("2d");
 
-  canvas[0].width = 1024;
-  canvas[0].height = 576;
+  canvas[0].width = window.innerWidth;;
+  canvas[0].height = window.innerHeight ;
   canvas.css("background-color", "black");
 
   c.fillRect(0, 0, canvas[0].width, canvas[0].height);
@@ -241,4 +241,14 @@ $(document).ready(function () {
     }
     console.log(e.key);
   });
+
+    // Resize canvas when window size changes
+    window.addEventListener('resize', function() {
+        canvas[0].width = window.innerWidth;
+        canvas[0].height = window.innerHeight;
+    
+        // Redraw everything after resizing
+        c.fillRect(0, 0, canvas[0].width, canvas[0].height);
+        // ... redraw other elements ...
+      });
 });

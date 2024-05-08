@@ -5,8 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fighting Game</title>
 </head>
-<body>
-    <canvas></canvas>
+<!-- <body style="margin: 0; padding: 0; overflow: hidden;"> -->
+    <body>
+    <!-- red container div-->
+    <div style="position: relative; display: inline-block;">
+        <!-- smaller red div -->
+        <div style="position: absolute; display: flex; width: 100%; align-items: center;">
+            <!-- player health -->
+            <div style="background-color: yellow; height: 30px; width: 100%;"></div>
+            <!-- timer -->
+            <div style="background-color: red; width: 100px; height: 100px; flex-shrink: 0;"></div>
+            <!-- enemy health -->
+            <div style="background-color: yellow; height: 30px; width: 100%;"></div>
+        </div>
+        <canvas></canvas>
+    </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="./index.js"></script>
