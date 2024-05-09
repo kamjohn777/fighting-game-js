@@ -136,6 +136,29 @@ $(document).ready(function () {
     );
   }
 
+  let timer = 10;
+  function decreaseTimer() {
+    setTimeout(decreaseTimer, 1000);
+    if (timer > 0) {
+      timer--;
+      $('#timer').text(timer);
+    }
+  
+    if (timer === 0) {
+      $('#displayText').css('display', 'flex');
+  
+      if (player.health === 100 && enemy.health === 100) {
+        $('#displayText').text("Draw");
+        console.log("Draw");
+      } else if (player.health > enemy.health) {
+        $('#displayText').text("Player 1 wins");
+        console.log("Player 1 wins");
+      }
+    }
+  }
+
+  decreaseTimer();
+
   function animate() {
     window.requestAnimationFrame(animate);
     c.clearRect(0, 0, canvas[0].width, canvas[0].height);
@@ -175,6 +198,8 @@ $(document).ready(function () {
         enemy.isAttacking
     ) {
       enemy.isAttacking = false;
+      $('#playerHealth').css('width', player.health + '%');
+        player.health -= 10;
       console.log("enemy collision");
     }
   }
