@@ -1,5 +1,6 @@
 // c = context
 
+
 $(document).ready(function () {
   const canvas = $("canvas");
   const c = canvas[0].getContext("2d");
@@ -12,71 +13,17 @@ $(document).ready(function () {
 
   const gravity = 0.7;
 
-  class Sprite {
-    constructor({ position, velocity, color = "red", offset }) {
-      this.position = position;
-      this.velocity = velocity;
-      this.height = 150;
-      this.width = 50;
-      this.lastKey;
-      this.color = color;
-      this.attackBox = {
-        position: {
-          x: this.position.x,
-          y: this.position.y,
+  const background = new Sprite({
+    position: {
+        x: 0,
+        y: 0,
         },
-        offset,
-        width: 100,
-        height: 50,
-      };
-      this.isAttacking = false;
-      this.health = 100;
-    }
+        imageSrc: "./assets/Preview/Background.png",
+        context: c,
+        canvas: canvas[0],
+  });
 
-    draw() {
-      c.fillStyle = this.color;
-      c.fillRect(this.position.x, this.position.y, 50, this.height, this.width);
-
-      //   Attack Box
-        if (this.isAttacking) {
-      c.fillStyle = "purple";
-      c.fillRect(
-        this.attackBox.position.x,
-        this.attackBox.position.y,
-        this.attackBox.width,
-        this.attackBox.height
-      );
-      }
-    }
-
-    update() {
-      this.draw();
-      this.attackBox.position.x = this.position.x + this.attackBox.offset.x;
-      //   this.attackBox.position.y = this.position.y;
-
-      this.position.x += this.velocity.x;
-      this.position.y += this.velocity.y;
-
-      // Update the position of the attack box
-      this.attackBox.position.x = this.position.x - this.attackBox.offset.x;
-      this.attackBox.position.y = this.position.y;
-
-      if (this.position.y + this.height + this.velocity.y >= canvas[0].height) {
-        this.velocity.y = 0;
-      } else {
-        this.velocity.y += gravity;
-      }
-    }
-
-    attack() {
-      this.isAttacking = true;
-      setTimeout(() => {
-        this.isAttacking = false;
-      }, 100);
-    }
-  }
-
-  const player = new Sprite({
+  const player = new Fighter({
     position: {
       x: 0,
       y: 0,
@@ -89,9 +36,12 @@ $(document).ready(function () {
       x: 0,
       y: 0,
     },
+    context: c,
+    canvas: canvas[0],
+    gravity: gravity,
   });
 
-  const enemy = new Sprite({
+  const enemy = new Fighter({
     position: {
       x: 400,
       y: 100,
@@ -105,6 +55,9 @@ $(document).ready(function () {
       y: 0,
     },
     color: "green",
+    context: c,
+    canvas: canvas[0],
+    gravity: gravity,
   });
 
   console.log(player);
@@ -127,7 +80,7 @@ $(document).ready(function () {
     },
   };
 
-  function rectangularCollision( rect1, rect2) {
+  function rectangularCollision(rect1, rect2) {
     return (
       rect1.attackBox.position.x + rect1.attackBox.width >= rect2.position.x &&
       rect1.attackBox.position.x <= rect2.position.x + rect2.width &&
@@ -136,24 +89,33 @@ $(document).ready(function () {
     );
   }
 
-  let timer = 10;
+  function determinedWinner({ player, enemy, timerId }) {
+    clearTimeout(timerId);
+    $("#displayText").css("display", "flex");
+
+    if (player.health === enemy.health) {
+      $("#displayText").text("Draw");
+      console.log("Draw");
+    } else if (player.health > enemy.health) {
+      $("#displayText").text("Player 1 wins");
+      console.log("Player 1 wins");
+    } else if (player.health < enemy.health) {
+      $("#displayText").text("Player 2 wins");
+      console.log("Player 2 wins");
+    }
+  }
+
+  let timer = 60;
+  let timerId;
   function decreaseTimer() {
-    setTimeout(decreaseTimer, 1000);
+    timerId = setTimeout(decreaseTimer, 1000);
     if (timer > 0) {
       timer--;
-      $('#timer').text(timer);
+      $("#timer").text(timer);
     }
-  
+
     if (timer === 0) {
-      $('#displayText').css('display', 'flex');
-  
-      if (player.health === 100 && enemy.health === 100) {
-        $('#displayText').text("Draw");
-        console.log("Draw");
-      } else if (player.health > enemy.health) {
-        $('#displayText').text("Player 1 wins");
-        console.log("Player 1 wins");
-      }
+      determinedWinner({ player, enemy, timerId});
     }
   }
 
@@ -162,6 +124,7 @@ $(document).ready(function () {
   function animate() {
     window.requestAnimationFrame(animate);
     c.clearRect(0, 0, canvas[0].width, canvas[0].height);
+    background.update();
     player.update();
     enemy.update();
 
@@ -183,24 +146,23 @@ $(document).ready(function () {
     }
 
     // Detecting collision
-    if (
-        rectangularCollision(player, enemy) &&
-        player.isAttacking
-    ) {
+    if (rectangularCollision(player, enemy) && player.isAttacking) {
       player.isAttacking = false;
       enemy.health -= 10;
-      $('#enemyHealth').css('width', enemy.health + '%');
+      $("#enemyHealth").css("width", enemy.health + "%");
       console.log("collision");
     }
 
-    if (
-        rectangularCollision(enemy, player) &&
-        enemy.isAttacking
-    ) {
+    if (rectangularCollision(enemy, player) && enemy.isAttacking) {
       enemy.isAttacking = false;
-      $('#playerHealth').css('width', player.health + '%');
-        player.health -= 10;
+      $("#playerHealth").css("width", player.health + "%");
+      player.health -= 10;
       console.log("enemy collision");
+    }
+
+    // end game based on health
+    if (enemy.health <= 0 || player.health <= 0) {
+      determinedWinner({ player, enemy, timerId });
     }
   }
 
@@ -236,12 +198,12 @@ $(document).ready(function () {
       case "ArrowUp":
         enemy.velocity.y = -20;
         break;
-        case "ArrowDown":
-            enemy.isAttacking = true;
-            setTimeout(() => {
-                enemy.isAttacking = false;
-            }, 100);
-            break;
+      case "ArrowDown":
+        enemy.isAttacking = true;
+        setTimeout(() => {
+          enemy.isAttacking = false;
+        }, 100);
+        break;
     }
     console.log(e.key);
   });
