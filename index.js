@@ -5,8 +5,8 @@ $(document).ready(function () {
   const canvas = $("canvas");
   const c = canvas[0].getContext("2d");
 
-  canvas[0].width = 1024;
-  canvas[0].height = 576;
+  canvas[0].width = 928;
+  canvas[0].height = 793;
   canvas.css("background-color", "black");
 
   c.fillRect(0, 0, canvas[0].width, canvas[0].height);
