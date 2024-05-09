@@ -4,8 +4,8 @@ $(document).ready(function () {
   const canvas = $("canvas");
   const c = canvas[0].getContext("2d");
 
-  canvas[0].width = window.innerWidth;;
-  canvas[0].height = window.innerHeight ;
+  canvas[0].width = 1024;
+  canvas[0].height = 576;
   canvas.css("background-color", "black");
 
   c.fillRect(0, 0, canvas[0].width, canvas[0].height);
@@ -30,6 +30,7 @@ $(document).ready(function () {
         height: 50,
       };
       this.isAttacking = false;
+      this.health = 100;
     }
 
     draw() {
@@ -164,6 +165,8 @@ $(document).ready(function () {
         player.isAttacking
     ) {
       player.isAttacking = false;
+      enemy.health -= 10;
+      $('#enemyHealth').css('width', enemy.health + '%');
       console.log("collision");
     }
 
@@ -241,14 +244,4 @@ $(document).ready(function () {
     }
     console.log(e.key);
   });
-
-    // Resize canvas when window size changes
-    window.addEventListener('resize', function() {
-        canvas[0].width = window.innerWidth;
-        canvas[0].height = window.innerHeight;
-    
-        // Redraw everything after resizing
-        c.fillRect(0, 0, canvas[0].width, canvas[0].height);
-        // ... redraw other elements ...
-      });
 });
