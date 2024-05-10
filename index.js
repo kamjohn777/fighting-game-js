@@ -25,15 +25,16 @@ $(document).ready(function () {
 
   const shop = new Sprite({
     position: {
-        x: 600,
-        y: 400,
-        },
-        imageSrc: "./assets/oak_woods_v1.0/decorations/shop_anim_resize-small.png",
-        context: c,
-        canvas: canvas[0],
-        scale: 3,
-        widthScale: 1,
-        framesMax: 6,
+      x: 550,
+      y: 400,
+    },
+    imageSrc: "./assets/oak_woods_v1.0/decorations/shop_anim_resize-small.png",
+    context: c,
+    canvas: canvas[0],
+    scale: 3,
+    widthScale: 1,
+    framesMax: 9,
+    frameDelay: 0.5, // Increase this value to slow down the animation
   });
 
   const player = new Fighter({
