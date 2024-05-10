@@ -9,7 +9,7 @@ class Sprite {
       this.canvas = canvas;
       this.scale = scale;
       this.widthScale = widthScale;
-      this.framesMax = framesMax
+      this.framesMax = framesMax;
     }
   
     draw() {
@@ -19,13 +19,23 @@ class Sprite {
         this.image,
         0,
         0,
-        this.width / this.framesMax,
+        this.width / this.framesMax ,
         this.height,
         this.position.x,
         this.position.y,
         (this.width * this.scale / this.framesMax) * this.widthScale,
         this.height * this.scale
       );
+
+      // Draw a rectangle over the cropped area
+    this.context.strokeStyle = 'red'; // Set the color of the rectangle
+    this.context.lineWidth = 2; // Set the width of the rectangle lines
+    this.context.strokeRect(
+      this.position.x,
+      this.position.y,
+      this.width / this.framesMax * 1.94,
+      this.height / this.framesMax * 2.5
+    );
     }
   
     update() {

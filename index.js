@@ -26,13 +26,14 @@ $(document).ready(function () {
   const shop = new Sprite({
     position: {
         x: 600,
-        y: 155,
+        y: 400,
         },
-        imageSrc: "./assets/oak_woods_v1.0/decorations/shop_anim.png",
+        imageSrc: "./assets/oak_woods_v1.0/decorations/shop_anim_resize-small.png",
         context: c,
         canvas: canvas[0],
         scale: 3,
         widthScale: 1,
+        framesMax: 6,
   });
 
   const player = new Fighter({
